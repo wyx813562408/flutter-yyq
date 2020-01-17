@@ -173,29 +173,34 @@ class AppBarItem extends StatelessWidget {
       child: Container(
 
    //   child: Expanded(
-        child: Center(
-          child: Row(
+        child:  Row(
            mainAxisAlignment: MainAxisAlignment.center,
            crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Expanded(child:Icon(IconData(0xe611, fontFamily: 'iconfont'),
+            Expanded(child:
+              Container(
+                margin: EdgeInsets.only(right: 4),
+                alignment: Alignment.centerRight,
+                child: Icon(IconData(0xe611, fontFamily: 'iconfont'),
                               color: Color.lerp(
                                   Colors.white, Colors.lightBlue, colorT),
-                              size: 20.0),),
+                              size: 20.0),
+              )
+            ),
             colorT <0.85 ? Expanded(
                 child: Text('排行',style: TextStyle(
                 color:Color.lerp( Colors.white, Colors.lightBlue, colorT),  ),
                 maxLines: 1,
                 overflow:TextOverflow.ellipsis ,
                 ),
-              ):Container()
+              ):Container(width: 8,)
             
            
              
           
           ],
         ),
-        )
+        
       //)
     ),
     );
