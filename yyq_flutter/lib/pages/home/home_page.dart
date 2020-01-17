@@ -37,6 +37,9 @@ class _HomePageState extends State<HomePage> {
                     child: ListView(
                       children: <Widget>[
                         BannerWidget(),
+                        Container(
+                          child: Center(child: Text('$appBarAlpha'),),
+                        )
                       ],
                     )),
                 Container(
@@ -170,22 +173,29 @@ class AppBarItem extends StatelessWidget {
       child: Container(
 
    //   child: Expanded(
-        child: Row(
+        child: Center(
+          child: Row(
            mainAxisAlignment: MainAxisAlignment.center,
+           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Icon(IconData(0xe611, fontFamily: 'iconfont'),
+            Expanded(child:Icon(IconData(0xe611, fontFamily: 'iconfont'),
                               color: Color.lerp(
                                   Colors.white, Colors.lightBlue, colorT),
-                              size: 20.0),
-           Expanded(
-             child: Text('排行',style: TextStyle(
+                              size: 20.0),),
+            colorT <0.85 ? Expanded(
+                child: Text('排行',style: TextStyle(
                 color:Color.lerp( Colors.white, Colors.lightBlue, colorT),  ),
                 maxLines: 1,
                 overflow:TextOverflow.ellipsis ,
                 ),
-           )
+              ):Container()
+            
+           
+             
+          
           ],
         ),
+        )
       //)
     ),
     );
