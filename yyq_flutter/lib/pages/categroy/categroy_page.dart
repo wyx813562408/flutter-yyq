@@ -12,7 +12,7 @@ class _CategroyPageState extends State<CategroyPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-       child: Icon( IconData(0xe611, fontFamily: 'iconfont'),color: Colors.blue,size: 89.0),
+       child: Icon( IconData(0xe61b, fontFamily: 'iconfont'),color: Colors.blue,size: 89.0),
     );
   }
 }

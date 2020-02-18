@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
 import './pages/tabbars/bottom_tabbar_controller.dart';
-
-void main() => runApp(MyApp());
+import './utils/net_util.dart';
+import 'package:fluro/fluro.dart';
+import 'package:yyq_flutter/route/routes.dart';
+import './Application.dart';
+void main() {
+  NetUtils.init();
+  Router  router = Router();
+  Routes.setConfigureRoutes(router);
+  Application.router = router;
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.

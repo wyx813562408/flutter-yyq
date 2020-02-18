@@ -25,6 +25,9 @@ dependencies:
   cupertino_icons: ^0.1.2
   flutter_swiper: ^1.1.6
   flutter_screenutil: ^1.0.0
+  dio: ^2.1.0 #网络请求
+  cached_network_image: ^1.1.2+1 #图片缓存
+  fluro: "^1.5.1" #页面路由
 dev_dependencies:
   flutter_test:
     sdk: flutter
