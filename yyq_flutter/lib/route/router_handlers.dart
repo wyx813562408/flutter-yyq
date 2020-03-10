@@ -22,7 +22,7 @@ var comicDetailHandler = new Handler(
   handlerFunc: (BuildContext context,Map<String, List<Object>> params){
     print(params);
     
-    return ComicDetailPage(comicId: params['comicId'].first );
+    return CustomSliverHeaderDemo( );
   });
 
 // var loginHandler = new Handler(
