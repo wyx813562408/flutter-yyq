@@ -4,9 +4,11 @@ import './utils/net_util.dart';
 import 'package:fluro/fluro.dart';
 import 'package:yyq_flutter/route/routes.dart';
 import './Application.dart';
+import 'package:flutter/services.dart';
+
 void main() {
   NetUtils.init();
-  Router  router = Router();
+  Router router = Router();
   Routes.setConfigureRoutes(router);
   Application.router = router;
   runApp(MyApp());
@@ -14,9 +16,13 @@ void main() {
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
-   
+    SystemChrome.setSystemUIOverlayStyle(
+        Theme.of(context).brightness != Brightness.dark
+            ? SystemUiOverlayStyle.light
+            : SystemUiOverlayStyle.dark);
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
@@ -31,7 +37,7 @@ class MyApp extends StatelessWidget {
 // class Tabbar extends StatelessWidget {
 //   final List<Map> tabbars;
 //   const Tabbar({Key key,@required this.tabbars}) : super(key: key);
-  
+
 //   @override
 //   Widget build(BuildContext context) {
 //     return DefaultTabController(

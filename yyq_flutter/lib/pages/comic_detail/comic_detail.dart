@@ -1,29 +1,49 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yyq_flutter/widgets/net_image_widget.dart';
+import 'package:yyq_flutter/widgets/widget_future_builder.dart';
+import 'package:yyq_flutter/utils/net_util.dart';
+import 'package:yyq_flutter/models/comic_detail_simple.dart';
+import 'package:yyq_flutter/utils/color_util.dart';
+import '../../utils/net_util.dart';
 
-class CustomSliverHeaderDemo extends StatelessWidget {
-  String comicId;
+class ComicDetailPage extends StatefulWidget {
+  final String comicId;
+  ComicDetailPage({Key key, this.comicId}) : super(key: key);
+
+  @override
+  _ComicDetailPageState createState() => _ComicDetailPageState();
+}
+
+class _ComicDetailPageState extends State<ComicDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        slivers: <Widget>[
-          SliverPersistentHeader(
-            pinned: true,
-            delegate: SliverCustomHeaderDelegate(
-              title: '哪吒之魔童降世',
-              collapsedHeight: 40,
-              expandedHeight: 300,
-              paddingTop: MediaQuery.of(context).padding.top,
-              coverImgUrl: 'https://img.zcool.cn/community/01c6615d3ae047a8012187f447cfef.jpg@1280w_1l_2o_100sh.jpg'
-            ),
-          ),
-          SliverFillRemaining(
-            child: FilmContent(),
-          )
-        ],
-      ),
-    );
+        body: CustomFutureBuilder(
+            futureFunc: NetUtils.getSingleComicDetail,
+            params: {'comicid': widget.comicId},
+            builder: (context, data) {
+              ComicDetailSimpleModel model = data as ComicDetailSimpleModel;
+              var sliverCustomHeaderDelegate = SliverCustomHeaderDelegate(
+                  title: '哪吒之魔童降世',
+                  collapsedHeight: 40,
+                  expandedHeight: ScreenUtil().setWidth(750 / (1232 / 730)),
+                  paddingTop: MediaQuery.of(context).padding.top,
+                  coverImgUrl: model.data.returnData.comic.wideCover,
+                  comic: model.data.returnData.comic);
+
+              return CustomScrollView(
+                slivers: <Widget>[
+                  SliverPersistentHeader(
+                    pinned: true,
+                    delegate: sliverCustomHeaderDelegate,
+                  ),
+                  SliverFillRemaining(
+                    child: FilmContent(),
+                  )
+                ],
+              );
+            }));
   }
 }
 
@@ -33,9 +53,11 @@ class SliverCustomHeaderDelegate extends SliverPersistentHeaderDelegate {
   final double paddingTop;
   final String coverImgUrl;
   final String title;
+  final Comic comic;
   String statusBarMode = 'dark';
 
   SliverCustomHeaderDelegate({
+    this.comic,
     this.collapsedHeight,
     this.expandedHeight,
     this.paddingTop,
@@ -55,63 +77,136 @@ class SliverCustomHeaderDelegate extends SliverPersistentHeaderDelegate {
   }
 
   void updateStatusBarBrightness(shrinkOffset) {
-    if(shrinkOffset > 50 && this.statusBarMode == 'dark') {
-      this.statusBarMode = 'light';
-      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        statusBarBrightness: Brightness.light,
-        statusBarIconBrightness: Brightness.light,
-      ));
-    } else if(shrinkOffset <= 50 && this.statusBarMode == 'light') {
-      this.statusBarMode = 'dark';
-      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        statusBarBrightness: Brightness.dark,
-        statusBarIconBrightness: Brightness.dark,
-      ));
-    }
+    //设置系统状态栏颜色
+    // if(shrinkOffset > 50 && this.statusBarMode == 'dark') {
+    //   this.statusBarMode = 'light';
+    //   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    //     statusBarBrightness: Brightness.light,
+    //     statusBarIconBrightness: Brightness.light,
+    //   ));
+    // } else if(shrinkOffset <= 50 && this.statusBarMode == 'light') {
+    //   this.statusBarMode = 'dark';
+    //   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    //     statusBarBrightness: Brightness.dark,
+    //     statusBarIconBrightness: Brightness.dark,
+    //   ));
+    // }
   }
 
   Color makeStickyHeaderBgColor(shrinkOffset) {
-    final int alpha = (shrinkOffset / (this.maxExtent - this.minExtent) * 255).clamp(0, 255).toInt();
-    return Color.fromARGB(alpha, 255, 255, 255);
+    final int alpha = (shrinkOffset / (this.maxExtent - this.minExtent) * 255)
+        .clamp(0, 255)
+        .toInt();
+
+    return Color.fromARGB(alpha, 15, 240, 39);
   }
 
   Color makeStickyHeaderTextColor(shrinkOffset, isIcon) {
-    if(shrinkOffset <= 50) {
+    if (shrinkOffset <= 50) {
       return isIcon ? Colors.white : Colors.transparent;
     } else {
-      final int alpha = (shrinkOffset / (this.maxExtent - this.minExtent) * 255).clamp(0, 255).toInt();
-      return Color.fromARGB(alpha, 0, 0, 0);
+      final int alpha = (shrinkOffset / (this.maxExtent - this.minExtent) * 255)
+          .clamp(0, 255)
+          .toInt();
+      return Color.fromARGB(alpha, 255, 255, 255);
     }
   }
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
     this.updateStatusBarBrightness(shrinkOffset);
+
+    TextStyle comicNameTS =
+        TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(24));
+    TextStyle authorTS =
+        TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(16));
+       TextStyle themeIdTS =
+        TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18)); 
     return Container(
       height: this.maxExtent,
       width: MediaQuery.of(context).size.width,
       child: Stack(
         fit: StackFit.expand,
         children: <Widget>[
-          Container(child: Image.network(this.coverImgUrl, fit: BoxFit.cover)),
-          Positioned(
-            left: 0,
-            top: this.maxExtent / 2,
-            right: 0,
-            bottom: 0,
-            child: Container(
+          Container(
+               
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Color(0x00000000),
-                    Color(0x90000000),
-                  ],
+                
+               
+                image: DecorationImage(
+                  image: NetworkImage(
+                    this.coverImgUrl,
+                  ),
+                  fit: BoxFit.fill,
                 ),
               ),
-            ),
-          ),
+              child: Stack(
+                children: <Widget>[
+                  Positioned(child: Opacity(opacity: 0.3,
+                    child: Container(
+                   color:  ColorsUtil.hexToColor(comic.wideColor),
+                  ),
+                  ),
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                  ),
+                  Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(left: 16, right: 16),
+                            child: ClipRRect(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                child: Container(
+                                  decoration: new BoxDecoration(
+                                      border: new Border.all(
+                                          color: Colors.white, width: 2)),
+                                  child: Image.network(comic.cover,
+                                      width: ScreenUtil().setWidth(161),
+                                      height: ScreenUtil().setWidth(213)),
+                                )),
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              Text(
+                                comic.name,
+                                style: comicNameTS,
+                              ),
+                              Text(
+                                comic.author.name,
+                                style: authorTS,
+                              ),
+                              Row(
+                                children: comic.themeIds.map((f) => 
+                                      Container(
+                                        padding: EdgeInsets.fromLTRB(12, 2, 12, 2),
+                                        margin: EdgeInsets.only(right:16),
+                                          decoration: new BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                              border: new Border.all(
+                                                  color: Colors.white,
+                                                  width: 2)),
+                                          child: Text(f,style: themeIdTS,),
+                                        ))
+                                    .toList(),
+                              )
+                            ],
+                          )
+                        ],
+                      ))
+                ],
+              )),
           Positioned(
             left: 0,
             right: 0,
@@ -128,7 +223,7 @@ class SliverCustomHeaderDelegate extends SliverPersistentHeaderDelegate {
                       IconButton(
                         icon: Icon(
                           Icons.arrow_back_ios,
-                          color: this.makeStickyHeaderTextColor(shrinkOffset, true),
+                          color: Colors.white,
                         ),
                         onPressed: () => Navigator.pop(context),
                       ),
@@ -137,13 +232,14 @@ class SliverCustomHeaderDelegate extends SliverPersistentHeaderDelegate {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w500,
-                          color: this.makeStickyHeaderTextColor(shrinkOffset, false),
+                          color: this
+                              .makeStickyHeaderTextColor(shrinkOffset, false),
                         ),
                       ),
                       IconButton(
                         icon: Icon(
                           Icons.share,
-                          color: this.makeStickyHeaderTextColor(shrinkOffset, true),
+                          color: Colors.white,
                         ),
                         onPressed: () {},
                       ),

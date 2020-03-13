@@ -56,7 +56,7 @@ class NetUtils {
 
  // 
 
-  //搜索
+  //获取首页详情
   static Future<ComicDetailListModel> getDetectListV4_5(
     BuildContext context, {
     Map<String, dynamic> params,
@@ -72,7 +72,7 @@ class NetUtils {
     Map<String, dynamic> params,
   }) async {
     var response =
-        await _get(context, '/comic/getDetectListV4_5/detail_simple_dynamic', params: params, isShowLoading: false);
+        await _get(context, '/comic/detail_simple_dynamic', params: params, isShowLoading: false);
     return ComicDetailSimpleModel.fromJson(response.data);
   }
 
