@@ -2,6 +2,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:fluro/fluro.dart';
 
+import '../pages/comic_detail/comic_detail.dart';
 import '../pages/tabbars/bottom_tabbar_controller.dart';
 import '../pages/comic_detail/comic_detail.dart';
 import '../models/comic_detail_list_model.dart';
@@ -22,7 +23,7 @@ var comicDetailHandler = new Handler(
   handlerFunc: (BuildContext context,Map<String, List<Object>> params){
     print(params);
     
-    return ComicDetailPage(comicId: params['comicId'].first );
+    return ComicDetailPage(comicId: params['comicId'][0], );
   });
 
 // var loginHandler = new Handler(

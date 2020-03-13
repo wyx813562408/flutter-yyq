@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 class ColorsUtil {
    /// 十六进制颜色，
    /// hex, 十六进制值，例如：0xffffff,
@@ -15,4 +14,17 @@ class ColorsUtil {
          (hex & 0x0000FF) >> 0,
          alpha);
    }
+
+
+  static Color hexToColor(String s) {
+  // 如果传入的十六进制颜色值不符合要求，返回默认值
+  if(s.length == 6){
+    s='#'+s;
+  }
+  if (s == null || s.length != 7 || int.tryParse(s.substring(1, 7), radix: 16) == null) {
+    s = '#999999';
+  }
+
+  return new Color(int.parse(s.substring(1, 7), radix: 16) + 0xFF000000);
+}
 }
