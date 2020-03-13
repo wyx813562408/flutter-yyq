@@ -19,12 +19,12 @@ class _ComicDetailPageState extends State<ComicDetailPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // NetUtils.getSingleComicDetail(context,params: {
-    //   'comicid':widget.comicId
-    // }).then((ComicDetailSimpleModel model){
-    //   print(model.data.returnData.comic.name);
-    // });
-    // print('model.data.returnData.comic.name');
+    NetUtils.getSingleComicDetail(context,params: {
+      'comicid':widget.comicId
+    }).then((ComicDetailSimpleModel model){
+      print(model.data.returnData.comic.name);
+    });
+    print('model.data.returnData.comic.name');
   }
 
   @override
@@ -37,42 +37,146 @@ class _ComicDetailPageState extends State<ComicDetailPage> {
               backgroundColor: Colors.transparent,
             ),
             preferredSize: Size.fromHeight(40)),
-        body: Container(
-          height: double.infinity,
-          child: Stack(
-            children: <Widget>[
-              CustomHead(),
-              Positioned(
-                  top: 0,
-                  bottom: 64,
-                  left: 0,
-                  right: 0,
-                  child: Transform.translate(
-                      offset: Offset(
-                          0,
-                          ScreenUtil().setWidth(540)-(MediaQueryData.fromWindow(window).padding.top +
-                              40)),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(8),
-                            topRight: Radius.circular(8)),
-                        child: Container(
-                            color: Colors.white,
-                            child: ListView.builder(
-                                itemCount: 100,
+        body: 
+        // Container(
+        //   color: Colors.red,
+        //   child: getAAAA(),
+        // ));
 
-                                //强制高度为50.0
-                                itemBuilder: (BuildContext context, int index) {
-                                  return Container(
-                                    height: 50,
-                                    color: Colors.white,
-                                    child: Text('$index'),
-                                  );
-                                })),
-                      )))
-            ],
+     Container(
+      height: double.infinity,
+      child: Stack(
+        children: <Widget>[
+          CustomHead(),
+          Positioned(
+              top: 0,
+              bottom: 64,
+              left: 0,
+              right: 0,
+              child: ClipRRect(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(8),
+                    topRight: Radius.circular(8)),
+                child: Container(
+                    child: ListView.builder(
+                        padding: EdgeInsets.only(
+                            top: ScreenUtil().setWidth(540) -
+                                (MediaQueryData.fromWindow(window)
+                                        .padding
+                                        .top +
+                                    40)),
+                        itemCount: 100,
+                        //强制高度为50.0
+                        itemBuilder: (BuildContext context, int index) {
+                          if (index == 0) {
+                            return ClipRRect(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(8),
+                                    topRight: Radius.circular(8)),
+                                child: Container(
+                                  height: 50,
+                                  color: Colors.white,
+                                  child: Text('$index'),
+                                ));
+                          }
+                          return Container(
+                            height: 50,
+                            color: Colors.white,
+                            child: Text('$index'),
+                          );
+                        })),
+              ))
+        ],
+      ),
+    ));
+  }
+
+  Widget getAAAA() {
+    return CustomScrollView(
+      slivers: <Widget>[
+        //AppBar，包含一个导航栏
+        SliverAppBar(
+          pinned: true,
+          expandedHeight: 250.0,
+          flexibleSpace: FlexibleSpaceBar(
+            title: const Text('Demo'),
+            background: Image.asset(
+              "./images/avatar.png",
+              fit: BoxFit.cover,
+            ),
           ),
-        ));
+        ),
+        
+        SliverToBoxAdapter(
+          child: 
+          ClipRRect(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(8),
+                    topRight: Radius.circular(8)),
+                child:
+          Container(
+            color: Colors.white,
+            child: Column(
+              children: <Widget>[
+                ListTile(
+                  title: Text('1111'),
+                ),
+                ListTile(
+                  title: Text('1111'),
+                ),
+                ListTile(
+                  title: Text('1111'),
+                ),
+                ListTile(
+                  title: Text('1111'),
+                ),
+                ListTile(
+                  title: Text('1111'),
+                ),
+                ListTile(
+                  title: Text('1111'),
+                ),
+                ListTile(
+                  title: Text('1111'),
+                ),
+                ListTile(
+                  title: Text('1111'),
+                ),
+                ListTile(
+                  title: Text('1111'),
+                ),
+                ListTile(
+                  title: Text('1111'),
+                ),
+                ListTile(
+                  title: Text('1111'),
+                ),
+                ListTile(
+                  title: Text('1111'),
+                ),
+                ListTile(
+                  title: Text('1111'),
+                ),
+                ListTile(
+                  title: Text('1111'),
+                ),
+                ListTile(
+                  title: Text('1111'),
+                ),
+                ListTile(
+                  title: Text('1111'),
+                ),
+                ListTile(
+                  title: Text('1111'),
+                ),
+              ],
+            ),
+          ),)
+        ),
+
+        //List
+      ],
+    );
   }
 }
 
